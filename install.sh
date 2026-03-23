@@ -68,8 +68,13 @@ else
   success "Installing to             $INSTALL_DIR"
 fi
 
-ln -sf "$INSTALL_DIR/gynx" "$INSTALL_DIR/gx"
-success "Creating alias            gx"
+if ln -sf "$INSTALL_DIR/gynx" "$INSTALL_DIR/gx" 2>/dev/null; then
+  success "Creating alias            gx"
+else
+  info "Permission required for alias, retrying with sudo..."
+  sudo ln -sf "$INSTALL_DIR/gynx" "$INSTALL_DIR/gx"
+  success "Creating alias            gx"
+fi
 
 echo ""
 echo "Gynx installed successfully"
