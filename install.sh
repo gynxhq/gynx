@@ -58,6 +58,8 @@ fi
 
 tar -xzf "$TMP_DIR/gynx.tar.gz" -C "$TMP_DIR"
 
+[ -f "$TMP_DIR/gynx" ] || fail "Extracted archive did not contain gynx binary"
+
 mkdir -p "$INSTALL_DIR" || true
 
 if install "$TMP_DIR/gynx" "$INSTALL_DIR/gynx" 2>/dev/null; then
@@ -75,6 +77,16 @@ else
   sudo ln -sf "$INSTALL_DIR/gynx" "$INSTALL_DIR/gx"
   success "Creating alias            gx"
 fi
+
+case ":$PATH:" in
+  *":$INSTALL_DIR:"*) ;;
+  *)
+    echo ""
+    info "$INSTALL_DIR is not currently on your PATH"
+    echo "Add this to your shell profile:"
+    echo "  export PATH=\"$INSTALL_DIR:\$PATH\""
+    ;;
+esac
 
 echo ""
 echo "Gynx installed successfully"
